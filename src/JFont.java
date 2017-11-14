@@ -1,21 +1,60 @@
 /* JFont, a simple Java UFO font editor. */
 
+// AWT
+import java.awt.BasicStroke;            // TODO Info here
+import java.awt.Canvas;                 // TODO Info here
+import java.awt.Color;                  //
+import java.awt.Dimension;              //
+import java.awt.Graphics;               //
+import java.awt.Graphics2D;             //
 import java.awt.Point;                  // For (x,y) points
+import java.awt.Rectangle;              //
+import java.awt.RenderingHints;         //
+// import java.awt.image.*;
+import java.awt.geom.Point2D;           //
+import java.awt.image.BufferedImage;    //
 
-import java.io.FileInputStream;         // TODO Info here
+// Input/Output
+import java.io.FileInputStream;         // TODO Info here////
 import java.io.IOException;             // TODO Info here
+import java.io.*;                       //
+import javax.imageio.*;                 //
 
+// Util
 import java.util.Arrays;                // TODO Info here
+import java.util.ArrayList;             //
+import java.util.List;                  //
 import java.util.Scanner;               // Get input
 import java.util.Random;                // Random
 
+// UFO/XML
 import javax.xml.bind.JAXBContext;      // TODO Info here
 import javax.xml.bind.JAXBElement;      // TODO Info here
 import javax.xml.bind.JAXBException;    // TODO Info here
 import javax.xml.bind.Marshaller;       // TODO Info here
-import javax.xml.bind.Unmarshaller;     // TOdo Info here
+import javax.xml.bind.Unmarshaller;     // TODO Info here
 
-public class JFont {
+// User Interface
+import javax.swing.JFrame;              //
+import javax.swing.JPanel;              //
+
+public class JFont extends Canvas {
+    
+    private static final int WIN_HEIGHT = 512;
+    private static final int WIN_WIDTH = 512;
+    private static final Dimension WIN_SIZE = 
+        new Dimension(WIN_WIDTH, WIN_WIDTH);
+    private static final Color[] colors = {
+        new Color(240, 020, 020),
+        new Color(240, 120, 000),
+        new Color(240, 240, 20 ),
+        new Color(40 , 240, 20 ), 
+        new Color(020, 150, 60 ), 
+        new Color(020, 150, 200),
+        new Color(20 , 40 , 220),
+        new Color(150, 20 , 240),
+        new Color(240, 020, 130)
+    };
 
     public static void main(String[] args) {
 
@@ -28,13 +67,13 @@ public class JFont {
 
 	// Main menu
         mainMenuChoice = mainMenu(input);
-	System.out.println("mainMenuChoice: "+mainMenuChoice);
+	System.out.println("Main Menu S = "+mainMenuChoice);
 
 	// Task router
 	taskRouter(mainMenuChoice);
 
 	// Debug menu
-	debug();
+	// debug();
 	
     } //END Main Method
 
@@ -45,18 +84,18 @@ public class JFont {
 	int selection;
 
 	// Display currently selected UFO file.
-	System.out.println("(Currently Editing: Sample.UFO)\n");
+	System.out.println("(Now Editing: Sample.UFO)\n");
 
 	// Display Menu 
         System.out.println("Choose from these choices");
         System.out.println("-------------------------");
         System.out.println("1 - Load new UFO");
         System.out.println("2 - Save current UFO");
-        System.out.println("3 - Export font  current UFO");
+        System.out.println("3 - Export font current UFO");
         System.out.println("4 - Edit glyphs");
         System.out.println("5 - Edit UFO metadata");
-        System.out.println("6 - Encrypt a number");
-        System.out.println("7 - Decrypt a number");
+        System.out.println("6 - Test Type");
+        System.out.println("7 - Edit Glyph Set");
         System.out.println("8 - Help");
 	System.out.println("9 - Quit\n");
 
@@ -68,8 +107,77 @@ public class JFont {
 
     /** Task router */
     public static void taskRouter(int task) {
-	System.out.println("In task router, task is: " + task);
+	System.out.println("In task router, task = " + task);
+        if (task == 1) {loadUFO();}
+        if (task == 2) {saveUFO();}
+        if (task == 3) {exportFont();}
+        if (task == 4) {editGlyphs();}
+        if (task == 5) {editUFO();}
+        if (task == 6) {testType();}
+        if (task == 7) {editGlyphSet();}
+        if (task == 8) {help();}
+        if (task == 9) {quit();}
     }
+
+    /** Load UFO : Task 1 */
+    public static void loadUFO() {
+        System.out.println("Load UFO");
+    }
+
+    /** Save UFO : Task 2 */
+    public static void saveUFO() {
+        System.out.println("Save UFO");
+    }
+
+    /** Export Font : Task 3 */
+    public static void exportFont() {
+        System.out.println("Export Font");
+    }
+
+    /** Edit glyphs : Task 4 */
+    public static void editGlyphs() {
+        System.out.println("Edit Glyphs");
+        JFrame frame = new JFrame("Edit Glyphs");
+        Canvas JFont = new JFont();
+        JFont.setSize(400, 400);
+        frame.add(JFont);
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    /** Edit UFO : Task 5 */
+    public static void editUFO() {
+        System.out.println("Edit UFO");
+    }
+
+    /** Test Type : Task 6 */
+    public static void testType() {
+        System.out.println("Test Type");
+    }
+    
+    /** Edit Glyph Set : Task 7 */
+    public static void editGlyphSet() {
+        System.out.println("Edit Glyph Set");
+    }
+
+    /** Help : Task 8 */
+    public static void help() {
+        System.out.println("Help");
+    }
+
+    /** Quit : Task 9 */
+    public static void quit() {
+        System.out.println("Quit");
+    }
+
+    public void paint(Graphics g) {
+        g.fillOval(100, 100, 200, 200);
+    }
+
+
+
+
+
 
     /** Print Point */
     public static void printPoint(Point p) {
