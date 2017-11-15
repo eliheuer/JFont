@@ -1,42 +1,43 @@
 /* JFont, a simple Java UFO font editor. */
 
 // AWT
-import java.awt.BasicStroke;            // TODO Info here
-import java.awt.Canvas;                 // TODO Info here
-import java.awt.Color;                  //
-import java.awt.Dimension;              //
-import java.awt.Graphics;               //
-import java.awt.Graphics2D;             //
-import java.awt.Point;                  // For (x,y) points
-import java.awt.Rectangle;              //
-import java.awt.RenderingHints;         //
+import java.awt.BasicStroke;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 // import java.awt.image.*;
-import java.awt.geom.Point2D;           //
-import java.awt.image.BufferedImage;    //
+import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 
 // Input/Output
-import java.io.FileInputStream;         // TODO Info here////
-import java.io.IOException;             // TODO Info here
-import java.io.*;                       //
-import javax.imageio.*;                 //
+import java.io.FileInputStream;
+import java.io.IOException;
+// import java.io.*;
+import javax.imageio.*;
+import java.io.File;
 
 // Util
-import java.util.Arrays;                // TODO Info here
-import java.util.ArrayList;             //
-import java.util.List;                  //
-import java.util.Scanner;               // Get input
-import java.util.Random;                // Random
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Random;
 
 // UFO/XML
-import javax.xml.bind.JAXBContext;      // TODO Info here
-import javax.xml.bind.JAXBElement;      // TODO Info here
-import javax.xml.bind.JAXBException;    // TODO Info here
-import javax.xml.bind.Marshaller;       // TODO Info here
-import javax.xml.bind.Unmarshaller;     // TODO Info here
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 // User Interface
-import javax.swing.JFrame;              //
-import javax.swing.JPanel;              //
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class JFont extends Canvas {
     
@@ -67,7 +68,6 @@ public class JFont extends Canvas {
 
 	// Main menu
         mainMenuChoice = mainMenu(input);
-	System.out.println("Main Menu S = "+mainMenuChoice);
 
 	// Task router
 	taskRouter(mainMenuChoice);
@@ -75,7 +75,7 @@ public class JFont extends Canvas {
 	// Debug menu
 	// debug();
 	
-    } //END Main Method
+    }
 
     /** Main Menu */
     public static int mainMenu(Scanner input) {
@@ -89,10 +89,10 @@ public class JFont extends Canvas {
 	// Display Menu 
         System.out.println("Choose from these choices");
         System.out.println("-------------------------");
-        System.out.println("1 - Load new UFO");
-        System.out.println("2 - Save current UFO");
-        System.out.println("3 - Export font current UFO");
-        System.out.println("4 - Edit glyphs");
+        System.out.println("1 - Load New UFO");
+        System.out.println("2 - Save Current UFO");
+        System.out.println("3 - New Glyph");
+        System.out.println("4 - Edit Glyph");
         System.out.println("5 - Edit UFO metadata");
         System.out.println("6 - Test Type");
         System.out.println("7 - Edit Glyph Set");
@@ -107,10 +107,10 @@ public class JFont extends Canvas {
 
     /** Task router */
     public static void taskRouter(int task) {
-	System.out.println("In task router, task = " + task);
+	// System.out.println("In task router, task = " + task);
         if (task == 1) {loadUFO();}
         if (task == 2) {saveUFO();}
-        if (task == 3) {exportFont();}
+        if (task == 3) {newGlyph();}
         if (task == 4) {editGlyphs();}
         if (task == 5) {editUFO();}
         if (task == 6) {testType();}
@@ -129,9 +129,36 @@ public class JFont extends Canvas {
         System.out.println("Save UFO");
     }
 
-    /** Export Font : Task 3 */
-    public static void exportFont() {
-        System.out.println("Export Font");
+    /** New Glyph : Task 3 */
+    public static void newGlyph() {
+        System.out.println("Creating Glyph...\n");
+        
+        Glyph glyph = new Glyph();
+        glyph.setFormat(1);
+        glyph.setName("A");
+        glyph.setUnicode("0041");
+        glyph.setWidth(512);
+
+        try {
+
+        File file = new File("TestGlyph_.glyph");
+
+        JAXBContext jaxbContext =
+            JAXBContext.newInstance(Glyph.class);
+        
+        Marshaller jaxbMarshaller = 
+            jaxbContext.createMarshaller();
+
+        // output pretty printed
+        jaxbMarshaller.setProperty(
+            Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+        jaxbMarshaller.marshal(glyph, file);
+        jaxbMarshaller.marshal(glyph, System.out);
+
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
     }
 
     /** Edit glyphs : Task 4 */
@@ -171,13 +198,10 @@ public class JFont extends Canvas {
     }
 
     public void paint(Graphics g) {
-        g.fillOval(100, 100, 200, 200);
+        for (int i=0;i<=100;i = i + 20) {
+            g.fillOval(i, i, 10, 10);
+        }
     }
-
-
-
-
-
 
     /** Print Point */
     public static void printPoint(Point p) {
@@ -234,6 +258,5 @@ public class JFont extends Canvas {
 	Point pointB = new Point(164,64);
 	System.out.println(distance(pointA, pointB));
 	unicode();
-    } //END debug method
-
-} //END JFont class
+    }
+}
